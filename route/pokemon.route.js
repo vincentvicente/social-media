@@ -79,7 +79,7 @@ router.post('/', function(req, res) {
     let level = req.body.level;
     const name = req.body.name;
     if(!name) {
-        res.status(401);
+        res.status(400);
         return res.send('Some values for new pokemone missing: ' + JSON.stringify(req.body));
     }
 
@@ -91,13 +91,12 @@ router.post('/', function(req, res) {
         level = 1;
     }
 
-
     const id = pokemonDB.length + 1;
 
     const newPokemon = {
         name: name,
         level: level,
-        helath: health,
+        health: health,
         id: id,
     }
 

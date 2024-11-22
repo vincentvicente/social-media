@@ -1,7 +1,7 @@
 const express = require('express');
 const helper = require('./helper');
 const pokemon = require('./route/pokemon.route');
-
+const user = require('./route/user.route');
 
 const app = express();
 
@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/pokemon', pokemon);
+app.use('/api/user', user);
 
 app.get('/', function(request, response) {
     const responseString = helper.returnRandomString();
