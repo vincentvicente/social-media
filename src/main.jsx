@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import Homepage from './Homepage.jsx';
 import PokemonDetail from './PokemonDetail.jsx';
+import Login from './Login.jsx';
+import Signup from './Signup.jsx';
 
 const router = createBrowserRouter([
   {
@@ -15,8 +17,16 @@ const router = createBrowserRouter([
     <Homepage />
   },
   {
-    path: '/:pokemonId',
+    path: '/pokemon/:pokemonId',
     element: <PokemonDetail />
+  }, 
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <Signup />
   }
 ]);
 

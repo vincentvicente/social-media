@@ -5,6 +5,7 @@ import { redirect } from "react-router-dom";
 
 export default function PokemonDetail() {
     const [pokemonDetailsState, setPokemonDetailState] = useState(null);
+    const [errorState, setErrorState] = useState('');
 
     const params = useParams();
 
@@ -18,7 +19,7 @@ export default function PokemonDetail() {
             setPokemonDetailState(response.data);
         } catch (error) {
             console.log(error)
-            navigate('/banana');
+            setErrorState('Issue loading pokemon');
         }
 
 
@@ -27,6 +28,10 @@ export default function PokemonDetail() {
     useEffect(() => {
         getPokemonDetails()
     }, []);
+
+    if(errorState) {
+        return (<div>Unable to load pokemon...</div>)
+    }
 
     if(!pokemonDetailsState) {
         return (<div>Loading...</div>)

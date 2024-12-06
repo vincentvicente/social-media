@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const pokemonModel = require('./db/pokemon.model');
+const jwtHelpers = require('./helpers/jwt')
+
 
 const pokemonDB = [
     {
@@ -22,37 +25,50 @@ const pokemonDB = [
     },
 ]
 
+
+
 // http://localhost:3000/api/pokemon/
-router.get('/', function(req, res) {
+router.get('/', async function(req, res) {
     /*
     http://localhost:3000/api/pokemon/?name=Pika
     req.query = {
         name: 'Pika
     }
     */
-    console.log(req.query);
+
+    const owner = jwtHelpers.decrypt(req.cookies.pokemonToken);
+
+    const pokemonList = await pokemonModel.findPokemonByOwner(owner);
+
+    res.cookie("huntersFavPokemon", "Pikachu");
+    res.send(pokemonList);
 
 
-    const nameSearchQuery = req.query.name;
+    // const nameSearchQuery = req.query.name;
 
-    if(!nameSearchQuery) {
-        res.send(pokemonDB);
-        return;
-    }
+    // if(!nameSearchQuery) {
+    //     res.send(pokemonDB);
+    //     return;
+    // }
 
-    const pokemonResponseList = [];
-    for(let i = 0; i < pokemonDB.length; i++) {
-        if(pokemonDB[i].name.includes(nameSearchQuery)) {
-            pokemonResponseList.push(pokemonDB[i])
-        }
-    }
+    // const pokemonResponseList = [];
+    // for(let i = 0; i < pokemonDB.length; i++) {
+    //     if(pokemonDB[i].name.includes(nameSearchQuery)) {
+    //         pokemonResponseList.push(pokemonDB[i])
+    //     }
+    // }
 
-    res.send(pokemonResponseList)
+    // res.send(pokemonResponseList)
 })
 
 // http://localhost:3000/api/pokemon/1 => Pikachu
-router.get('/:pokemonId', function(req, res) {
+router.get('/:pokemonId', async function(req, res) {
+
+    const owner = jwtHelpers.decrypt(req.cookies.pokemonToken);
+
     
+    const pokemonId = req.params.pokemonId;
+
     /*
 
     http://localhost:3000/api/pokemon/1
@@ -61,48 +77,81 @@ router.get('/:pokemonId', function(req, res) {
     }
     */
 
-    console.log(req.params);
+    const cookies = req.cookies;
+    console.log("This is my fav pokemon: ", cookies.huntersFavPokemon);
 
-    for(let i = 0; i < pokemonDB.length; i++) {
-        if(pokemonDB[i].id.toString() === req.params.pokemonId) {
-            return res.send(pokemonDB[i]);
+    try {
+        const pokemon = await pokemonModel.findPokemonById(pokemonId);
+        
+        if(pokemon.owner !== owner) {
+            res.status(404)
+            res.send("You do not have permissiont to access pokemon " + req.params.pokemonId + "");
+
         }
+
+        
+        return res.send(pokemon);
+
+
+    } catch (error) {
+        res.status(404)
+        res.send("No pokemon with ID " + req.params.pokemonId + " found :(");
+    
     }
 
-    res.status(404)
-    res.send("No pokemon with ID " + req.params.pokemonId + " found :(");
+
+    // for(let i = 0; i < pokemonDB.length; i++) {
+    //     if(pokemonDB[i].id.toString() === req.params.pokemonId) {
+    //         return res.send(pokemonDB[i]);
+    //     }
+    // }
+
 
 })
 
-router.post('/', function(req, res) {
-    let health = req.body.health;
-    let level = req.body.level;
-    const name = req.body.name;
-    if(!name) {
+router.post('/', async function(req, res) {
+    const newPokemon = {};
+
+    if(!req.body.name) {
         res.status(400);
         return res.send('Some values for new pokemone missing: ' + JSON.stringify(req.body));
     }
 
-    if(!health) {
-        health = 100;
+    newPokemon.name = req.body.name;
+
+    const owner = jwtHelpers.decrypt(req.cookies.pokemonToken);
+    newPokemon.owner = owner;
+
+    if(!req.body.health) {
+        newPokemon.health = 100;
     }
 
-    if(!level) {
-        level = 1;
+    if(!req.body.level) {
+        newPokemon.level = 1;
     }
 
-    const id = pokemonDB.length + 1;
+    const pokemonDBResponse = await pokemonModel.insertPokemon(newPokemon);
 
-    const newPokemon = {
-        name: name,
-        level: level,
-        health: health,
-        id: id,
-    }
+    // if(!name) {
+    //     res.status(400);
+    //     return res.send('Some values for new pokemone missing: ' + JSON.stringify(req.body));
+    // }
 
-    pokemonDB.push(newPokemon);
 
-    res.send("Created new Pokemon with ID "  + id);
+
+    // const id = pokemonDB.length + 1;
+
+    // const newPokemon = {
+    //     name: name,
+    //     level: level,
+    //     health: health,
+    //     id: id,
+    // }
+
+    // pokemonDB.push(newPokemon);
+
+
+    res.send(pokemonDBResponse);
 })
 
 // // http://localhost:3000/api/pokemon/favorite

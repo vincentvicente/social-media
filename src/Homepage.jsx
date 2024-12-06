@@ -27,7 +27,8 @@ export default function Homepage() {
             Name: {pokemon.name} 
             - Health: {pokemon.health} 
             - Level: {pokemon.level}
-            - <Link to={'/' + pokemon.id} > Edit</Link>
+            - Owner: {pokemon.owner}
+            - <Link to={'/pokemon/' + pokemon._id} > Edit</Link>
          </div>)
         pokemonComponents.push(newPokeComponent)
     }
