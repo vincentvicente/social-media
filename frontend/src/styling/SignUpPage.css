@@ -1,0 +1,4 @@
+/* SignUpPage使用与LoginPage相同的样式 */
+@import './LoginPage.css';
+
+/* 额外的注册页面特定样式可以在这里添加 */

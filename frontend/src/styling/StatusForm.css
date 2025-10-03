@@ -1,0 +1,219 @@
+.status-form {
+  background: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.status-form:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  margin-bottom: 15px;
+}
+
+.form-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #14171a;
+}
+
+.textarea-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.status-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 15px;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  resize: vertical;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #f7f9fa;
+}
+
+.status-textarea:focus {
+  border-color: #1da1f2;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+}
+
+.status-textarea.error {
+  border-color: #e0245e;
+  background-color: #fff5f7;
+}
+
+.status-textarea::placeholder {
+  color: #657786;
+}
+
+.status-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 字符计数器 */
+.char-counter-wrapper {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.char-counter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-circle {
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+.char-counter:hover .counter-circle {
+  transform: scale(1.1);
+}
+
+.counter-progress {
+  transition: stroke-dasharray 0.3s ease, stroke 0.3s ease;
+}
+
+.char-count {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  color: #657786;
+}
+
+.char-counter.near-limit .char-count {
+  color: #ffad1f;
+}
+
+.char-counter.over-limit .char-count {
+  color: #e0245e;
+  font-size: 11px;
+}
+
+/* 表单底部 */
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #e1e8ed;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.emoji-button,
+.media-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background-color: transparent;
+  border: 2px solid #e1e8ed;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.emoji-button:hover,
+.media-button:hover {
+  background-color: #e8f5fe;
+  border-color: #1da1f2;
+  transform: scale(1.1);
+}
+
+.submit-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 小型加载动画 */
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .status-form {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .form-header h3 {
+    font-size: 16px;
+  }
+
+  .status-textarea {
+    min-height: 100px;
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .submit-button {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+
+  .emoji-button,
+  .media-button {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+}
+
